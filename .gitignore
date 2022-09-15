@@ -1,2 +1,3 @@
-.pants.d
-.pids
+/.pants.*
+/dist/
+/.pids
