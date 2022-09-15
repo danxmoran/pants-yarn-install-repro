@@ -6,10 +6,12 @@ files(
 
 experimental_shell_command(
     name="yarn-install",
-    command="yarn install --immutable",
+    command="yarn install --immutable && tar czf node_modules.tar.gz node_modules",
     tools=[
         "yarn",
         "node",
+        "tar",
+        "gzip",
         # NOTE: These are needed to run `yarn` via `asdf`.
         # Shouldn't be needed if you install `yarn` some other way.
         "bash",
@@ -42,12 +44,12 @@ experimental_shell_command(
         "//pdf-generator/backend:package-json",
         "//prototype-environment/frontend:package-json",
     ],
-    outputs=["node_modules/"],
+    outputs=["node_modules.tar.gz"],
     timeout=300,
 )
 
 experimental_run_shell_command(
     name="run-yarn-install",
-    command="ls {chroot}/node_modules/",
+    command="cd {chroot} && tar xzf node_modules.tar.gz && ls node_modules/",
     dependencies=[":yarn-install"],
 )
